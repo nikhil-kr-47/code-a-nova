@@ -1,0 +1,26 @@
+{
+  "name": "code-a-nova-portal",
+  "version": "1.0.0",
+  "description": "Full-Stack Hackathon Registration Portal (MERN + Nodemailer)",
+  "private": true,
+  "scripts": {
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
+    "install:all": "npm run install:server && npm run install:client",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "build:client": "cd client && npm run build"
+  },
+  "keywords": [
+    "hackathon",
+    "mern",
+    "react",
+    "express",
+    "mongodb",
+    "nodemailer",
+    "jwt",
+    "otp"
+  ],
+  "author": "Code-a-Nova Team",
+  "license": "ISC"
+}
