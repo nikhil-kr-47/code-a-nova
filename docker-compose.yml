@@ -26,9 +26,12 @@ services:
       - MONGO_URI=mongodb://mongodb:27017/code_a_nova
       - JWT_SECRET=super_secret_jwt_key_code_a_nova_2026_xyz
       - CLIENT_URL=http://localhost:3000
-      - EMAIL_SERVICE=gmail
-      - EMAIL_USER=${EMAIL_USER:-codeanova.official@gmail.com}
+      - EMAIL_SERVICE=${EMAIL_SERVICE:-brevo}
+      - SMTP_HOST=${SMTP_HOST:-smtp-relay.brevo.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - EMAIL_USER=${EMAIL_USER:-}
       - EMAIL_PASS=${EMAIL_PASS:-}
+      - EMAIL_FROM=${EMAIL_FROM:-}
     depends_on:
       - mongodb
     networks:
