@@ -9,8 +9,6 @@ import {
   RefreshCw,
   Clock,
   CheckCircle2,
-  KeyRound,
-  Info,
 } from 'lucide-react';
 
 export const VerifyOtp = () => {
@@ -21,10 +19,6 @@ export const VerifyOtp = () => {
   // Extract email from query param or router state
   const queryEmail = new URLSearchParams(location.search).get('email') || '';
   const [email, setEmail] = useState(queryEmail);
-
-  // Dev preview OTP (if running without SMTP credentials configured)
-  const [previewOtp, setPreviewOtp] = useState(location.state?.previewOtp || '');
-  const [isMock, setIsMock] = useState(!!location.state?.isMock);
 
   // 6-digit OTP state as array of 6 strings
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -116,13 +110,6 @@ export const VerifyOtp = () => {
     inputRefs.current[focusIndex]?.focus();
   };
 
-  const handleAutoFill = (code) => {
-    if (!code) return;
-    const digits = code.slice(0, 6).split('');
-    setOtp(digits);
-    inputRefs.current[5]?.focus();
-  };
-
   const handleVerify = async (e) => {
     e.preventDefault();
     setError('');
@@ -170,10 +157,6 @@ export const VerifyOtp = () => {
         setTimeLeft(600);
         setResendCooldown(45);
         setOtp(['', '', '', '', '', '']);
-        if (res.previewOtp) {
-          setPreviewOtp(res.previewOtp);
-          setIsMock(true);
-        }
         inputRefs.current[0]?.focus();
       }
     } catch (err) {
@@ -200,31 +183,6 @@ export const VerifyOtp = () => {
           </div>
         </div>
 
-        {/* Demo Mode / Mock Mailer Notice Banner */}
-        {previewOtp && (
-          <div className="mb-5 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-2">
-            <div className="flex items-start space-x-2">
-              <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold">Evaluation / Dev Mailer Active:</span>
-                <p className="mt-0.5 text-amber-800">
-                  Gmail App Password isn't configured in <code>.env</code> yet, so your generated OTP is:{' '}
-                  <strong className="font-mono text-sm tracking-wider bg-amber-100 px-1.5 py-0.5 rounded border border-amber-300">
-                    {previewOtp}
-                  </strong>
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => handleAutoFill(previewOtp)}
-              className="w-full py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold text-[11px] transition"
-            >
-              Click here to Auto-Fill OTP ({previewOtp})
-            </button>
-          </div>
-        )}
-
         {error && (
           <div className="mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-start space-x-2.5 text-rose-700 text-xs sm:text-sm">
             <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-0.5" />
@@ -240,7 +198,7 @@ export const VerifyOtp = () => {
         )}
 
         <form onSubmit={handleVerify} className="space-y-5 sm:space-y-6">
-          {/* 6 Digit Input Boxes (responsive size) */}
+          {/* 6 Digit Input Boxes */}
           <div>
             <div
               className="flex items-center justify-center gap-1.5 sm:gap-2.5 max-w-full"

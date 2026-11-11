@@ -104,16 +104,10 @@ export const signup = async (req, res) => {
       console.log(`[Dev/Fallback OTP for ${normalizedEmail}]: ${otpCode}`);
     }
 
-    const showOtpPreview = isMockMailer || !emailSentSuccessfully;
-
     return res.status(201).json({
       success: true,
-      message: emailSentSuccessfully
-        ? 'Signup successful! A 6-digit OTP has been sent to your email.'
-        : `Signup initiated! (Your verification OTP is: ${otpCode})`,
+      message: 'Signup initiated! A 6-digit OTP has been sent to your email.',
       email: normalizedEmail,
-      isMock: showOtpPreview,
-      previewOtp: showOtpPreview ? otpCode : undefined,
     });
   } catch (error) {
     console.error('[Signup Error]:', error);
@@ -246,15 +240,9 @@ export const resendOtp = async (req, res) => {
       console.log(`[Dev/Fallback OTP for ${normalizedEmail}]: ${otpCode}`);
     }
 
-    const showOtpPreview = isMockMailer || !emailSentSuccessfully;
-
     return res.status(200).json({
       success: true,
-      message: emailSentSuccessfully
-        ? 'A fresh OTP has been dispatched to your email.'
-        : `Fresh OTP generated! (Your verification OTP is: ${otpCode})`,
-      isMock: showOtpPreview,
-      previewOtp: showOtpPreview ? otpCode : undefined,
+      message: 'A fresh OTP has been dispatched to your email.',
     });
   } catch (error) {
     console.error('[Resend OTP Error]:', error);

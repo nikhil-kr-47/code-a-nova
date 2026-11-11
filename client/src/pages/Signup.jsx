@@ -59,13 +59,8 @@ export const Signup = () => {
     try {
       const res = await signup(formData);
       if (res.success) {
-        // Redirect to OTP verification page passing email and previewOtp in state
-        navigate(`/verify-otp?email=${encodeURIComponent(formData.email.trim())}`, {
-          state: {
-            previewOtp: res.previewOtp,
-            isMock: res.isMock,
-          },
-        });
+        // Redirect to OTP verification page passing email
+        navigate(`/verify-otp?email=${encodeURIComponent(formData.email.trim())}`);
       }
     } catch (err) {
       const message =
