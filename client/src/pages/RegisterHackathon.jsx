@@ -250,6 +250,9 @@ export const RegisterHackathon = () => {
               A formal confirmation email has been dispatched via Nodemailer to{' '}
               <strong>{successData.email}</strong>.
             </p>
+            <p className="text-[11px] sm:text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 mt-2">
+              Note: If you don't see the email in your primary inbox, please check your <strong>Spam</strong> or <strong>Promotions</strong> folder.
+            </p>
           </div>
 
           <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-left text-xs space-y-2">
@@ -707,7 +710,7 @@ export const RegisterHackathon = () => {
           <div>
             <div className="text-xs sm:text-sm font-bold">Ready to finalize your entry?</div>
             <div className="text-[11px] text-slate-400 mt-0.5">
-              Confirmation email will be dispatched automatically.
+              Confirmation email will be dispatched automatically (check Spam folder if not in Inbox).
             </div>
           </div>
 

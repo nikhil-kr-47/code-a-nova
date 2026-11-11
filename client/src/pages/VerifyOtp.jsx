@@ -181,6 +181,9 @@ export const VerifyOtp = () => {
             <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">{email || 'your email address'}</span>
           </div>
+          <p className="text-[11px] sm:text-xs text-amber-700 bg-amber-50 border border-amber-200/70 rounded-lg px-3 py-1.5 mt-2.5 max-w-xs mx-auto">
+            Please check your <strong>Inbox</strong> and <strong>Spam / Junk</strong> folder.
+          </p>
         </div>
 
         {error && (
@@ -258,7 +261,9 @@ export const VerifyOtp = () => {
 
         {/* Resend OTP Section */}
         <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col items-center justify-center text-xs sm:text-sm space-y-2">
-          <p className="text-slate-500">Didn't receive the OTP code?</p>
+          <p className="text-slate-500 text-center">
+            Didn't receive the OTP code? Be sure to check your <strong>Spam</strong> or <strong>Promotions</strong> folder.
+          </p>
           <button
             type="button"
             onClick={handleResend}

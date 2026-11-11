@@ -6,7 +6,7 @@
 export const getOtpEmailTemplate = (otp) => {
   return {
     subject: `Your Code-a-Nova Verification Code: ${otp}`,
-    text: `Welcome to Code-a-Nova!\n\nYour 6-digit account verification code is: ${otp}\n\nThis code will expire in 10 minutes. Please do not share this code with anyone.\n\nBest regards,\nCode-a-Nova Team`,
+    text: `Welcome to Code-a-Nova!\n\nYour 6-digit account verification code is: ${otp}\n\nThis code will expire in 10 minutes. Please do not share this code with anyone.\n\nNote: If you received this in your Spam or Junk folder, please mark it as 'Not Spam' to receive future hackathon announcements directly in your Inbox.\n\nBest regards,\nCode-a-Nova Team`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -21,6 +21,7 @@ export const getOtpEmailTemplate = (otp) => {
           .content { padding: 32px 28px; }
           .otp-box { background: #f1f5f9; border: 2px dashed #cbd5e1; border-radius: 8px; text-align: center; padding: 20px; margin: 24px 0; }
           .otp-code { font-family: monospace; font-size: 36px; font-weight: 800; letter-spacing: 8px; color: #4f46e5; }
+          .spam-notice { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px; margin-top: 16px; font-size: 12px; color: #64748b; line-height: 1.5; }
           .footer { padding: 20px 28px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center; }
         </style>
       </head>
@@ -41,6 +42,9 @@ export const getOtpEmailTemplate = (otp) => {
             <p style="font-size: 13px; color: #dc2626; margin-bottom: 0;">
               Note: This code will expire in <strong>10 minutes</strong>. Never disclose this OTP to anyone.
             </p>
+            <div class="spam-notice">
+              <strong>Check your Spam or Junk folder:</strong> If this email arrived in your Spam, Junk, or Promotions folder, please mark it as <em>'Not Spam'</em> or move it to your Primary Inbox to make sure you receive all upcoming hackathon evaluation updates.
+            </div>
           </div>
           <div class="footer">
             <p style="margin: 0;">This email was sent automatically by <strong>Code-a-Nova</strong>.</p>
@@ -110,7 +114,7 @@ export const getRegistrationEmailTemplate = ({
 
   return {
     subject: `Registration Confirmed: Code-a-Nova 2026 [${registrationId}]`,
-    text: `Hello ${fullName},\n\nYour registration for Code-a-Nova Hackathon 2026 has been successfully confirmed!\n\nRegistration ID: ${registrationId}\nProject Name: ${projectName}\nDomain/Track: ${domainTrack}\nCollege: ${collegeName}\nTeam Size: ${teamSize}\n\nTeam Composition:\n${textMembersList}\n\nWe look forward to seeing your project come to life.\n\nBest regards,\nCode-a-Nova Team`,
+    text: `Hello ${fullName},\n\nYour registration for Code-a-Nova Hackathon 2026 has been successfully confirmed!\n\nRegistration ID: ${registrationId}\nProject Name: ${projectName}\nDomain/Track: ${domainTrack}\nCollege: ${collegeName}\nTeam Size: ${teamSize}\n\nTeam Composition:\n${textMembersList}\n\nImportant: If any of our emails land in your Spam or Junk folder, please mark them as 'Not Spam' so you don't miss important schedule changes, shortlisting updates, or mentoring sessions.\n\nWe look forward to seeing your project come to life.\n\nBest regards,\nCode-a-Nova Team`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -124,6 +128,7 @@ export const getRegistrationEmailTemplate = ({
           .badge { display: inline-block; background: #4f46e5; color: #ffffff; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; margin-top: 8px; }
           .content { padding: 32px 28px; }
           .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0; }
+          .spam-box { background: #f8fafc; border-left: 3px solid #4f46e5; padding: 12px 14px; margin: 20px 0 0 0; font-size: 12px; color: #475569; line-height: 1.5; }
           .footer { padding: 20px 28px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center; }
         </style>
       </head>
@@ -166,6 +171,9 @@ export const getRegistrationEmailTemplate = ({
             <p style="font-size: 14px; color: #475569; line-height: 1.6;">
               Please keep your Registration ID <strong>${registrationId}</strong> handy for project evaluation, team check-in, and the grand finale.
             </p>
+            <div class="spam-box">
+              <strong>Check your Spam or Junk folder:</strong> If any future hackathon communication lands in your spam or junk folder, please mark it as <em>'Not Spam'</em> or add <code>codeanova.official@gmail.com</code> to your contacts.
+            </div>
           </div>
           <div class="footer">
             <p style="margin: 0;">Sent by <strong>Code-a-Nova</strong> | National Student Hackathon</p>
