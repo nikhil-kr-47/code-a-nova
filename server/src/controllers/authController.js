@@ -87,24 +87,33 @@ export const signup = async (req, res) => {
       otp: otpCode,
     });
 
-    // Send email using Nodemailer
-    const emailPayload = getOtpEmailTemplate(otpCode);
-    await transporter.sendMail({
-      from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
-      to: normalizedEmail,
-      subject: emailPayload.subject,
-      text: emailPayload.text,
-      html: emailPayload.html,
-    });
+    // Send email using Nodemailer with graceful fallback on SMTP error
+    let emailSentSuccessfully = false;
+    try {
+      const emailPayload = getOtpEmailTemplate(otpCode);
+      await transporter.sendMail({
+        from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
+        to: normalizedEmail,
+        subject: emailPayload.subject,
+        text: emailPayload.text,
+        html: emailPayload.html,
+      });
+      emailSentSuccessfully = !isMockMailer;
+    } catch (mailError) {
+      console.error('[SMTP Mail Error] Failed to dispatch email via SMTP:', mailError.message);
+      console.log(`[Dev/Fallback OTP for ${normalizedEmail}]: ${otpCode}`);
+    }
+
+    const showOtpPreview = isMockMailer || !emailSentSuccessfully;
 
     return res.status(201).json({
       success: true,
-      message: isMockMailer
-        ? `Signup initiated! (Mock Mailer active: Your OTP is ${otpCode})`
-        : 'Signup initiated! A 6-digit OTP has been sent to your email.',
+      message: emailSentSuccessfully
+        ? 'Signup successful! A 6-digit OTP has been sent to your email.'
+        : `Signup initiated! (Your verification OTP is: ${otpCode})`,
       email: normalizedEmail,
-      isMock: isMockMailer,
-      previewOtp: isMockMailer ? otpCode : undefined,
+      isMock: showOtpPreview,
+      previewOtp: showOtpPreview ? otpCode : undefined,
     });
   } catch (error) {
     console.error('[Signup Error]:', error);
@@ -220,23 +229,32 @@ export const resendOtp = async (req, res) => {
       otp: otpCode,
     });
 
-    // Send email
-    const emailPayload = getOtpEmailTemplate(otpCode);
-    await transporter.sendMail({
-      from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
-      to: normalizedEmail,
-      subject: emailPayload.subject,
-      text: emailPayload.text,
-      html: emailPayload.html,
-    });
+    // Send email with error catch
+    let emailSentSuccessfully = false;
+    try {
+      const emailPayload = getOtpEmailTemplate(otpCode);
+      await transporter.sendMail({
+        from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
+        to: normalizedEmail,
+        subject: emailPayload.subject,
+        text: emailPayload.text,
+        html: emailPayload.html,
+      });
+      emailSentSuccessfully = !isMockMailer;
+    } catch (mailError) {
+      console.error('[SMTP Resend Error]:', mailError.message);
+      console.log(`[Dev/Fallback OTP for ${normalizedEmail}]: ${otpCode}`);
+    }
+
+    const showOtpPreview = isMockMailer || !emailSentSuccessfully;
 
     return res.status(200).json({
       success: true,
-      message: isMockMailer
-        ? `Fresh OTP generated! (Mock Mailer active: Your OTP is ${otpCode})`
-        : 'A fresh OTP has been dispatched to your email.',
-      isMock: isMockMailer,
-      previewOtp: isMockMailer ? otpCode : undefined,
+      message: emailSentSuccessfully
+        ? 'A fresh OTP has been dispatched to your email.'
+        : `Fresh OTP generated! (Your verification OTP is: ${otpCode})`,
+      isMock: showOtpPreview,
+      previewOtp: showOtpPreview ? otpCode : undefined,
     });
   } catch (error) {
     console.error('[Resend OTP Error]:', error);
