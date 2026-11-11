@@ -115,33 +115,50 @@ VITE_API_URL=http://localhost:5000/api
 
 ## 📦 Installation & Setup
 
-### Prerequisites
-- Node.js (v18.0.0 or higher)
-- npm (v9.0.0 or higher)
-- MongoDB instance (local or MongoDB Atlas connection string)
+### Option A: 🐳 Docker Quickstart (Recommended - 1 Command)
 
-### 1. Install Dependencies
-From the root directory:
+With Docker and Docker Compose installed, spin up the entire stack (MongoDB + Backend + Frontend) automatically:
+
 ```bash
-# Install backend dependencies
-cd server
-npm install
-
-# Install frontend dependencies
-cd ../client
-npm install
+docker compose up --build
 ```
 
-### 2. Start the Application
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000/api
+- **MongoDB**: localhost:27017
 
-#### Run the Backend Server:
+To run in the background (detached mode):
+```bash
+docker compose up -d
+```
+To stop the containers:
+```bash
+docker compose down
+```
+
+---
+
+### Option B: Local Node.js Setup
+
+#### Prerequisites
+- Node.js (v18.0.0 or higher)
+- npm (v9.0.0 or higher)
+- MongoDB running locally or a MongoDB Atlas URI
+
+#### 1. Install Dependencies
+```bash
+# From the root directory:
+npm run install:all
+```
+
+#### 2. Start the Backend Server:
 ```bash
 cd server
 npm run dev
 # Server will listen on http://localhost:5000
 ```
 
-#### Run the Frontend Client:
+#### 3. Start the Frontend Client:
 ```bash
 cd client
 npm run dev
