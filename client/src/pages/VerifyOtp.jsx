@@ -9,6 +9,8 @@ import {
   RefreshCw,
   Clock,
   CheckCircle2,
+  KeyRound,
+  Info,
 } from 'lucide-react';
 
 export const VerifyOtp = () => {
@@ -19,6 +21,10 @@ export const VerifyOtp = () => {
   // Extract email from query param or router state
   const queryEmail = new URLSearchParams(location.search).get('email') || '';
   const [email, setEmail] = useState(queryEmail);
+
+  // Dev preview OTP (if running without SMTP credentials configured)
+  const [previewOtp, setPreviewOtp] = useState(location.state?.previewOtp || '');
+  const [isMock, setIsMock] = useState(!!location.state?.isMock);
 
   // 6-digit OTP state as array of 6 strings
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -34,7 +40,6 @@ export const VerifyOtp = () => {
   const [resendCooldown, setResendCooldown] = useState(0);
 
   useEffect(() => {
-    // If no email in URL or state, allow user to enter one
     if (!email) {
       setError('Please provide the email address you registered with.');
     }
@@ -78,14 +83,13 @@ export const VerifyOtp = () => {
       return;
     }
 
-    // Only allow numeric input
     if (value && !/^\d$/.test(value)) return;
 
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // Auto advance to next input
+    // Auto advance
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -110,6 +114,13 @@ export const VerifyOtp = () => {
 
     const focusIndex = Math.min(pastedData.length, 5);
     inputRefs.current[focusIndex]?.focus();
+  };
+
+  const handleAutoFill = (code) => {
+    if (!code) return;
+    const digits = code.slice(0, 6).split('');
+    setOtp(digits);
+    inputRefs.current[5]?.focus();
   };
 
   const handleVerify = async (e) => {
@@ -156,9 +167,13 @@ export const VerifyOtp = () => {
       const res = await resendOtp(email);
       if (res.success) {
         setSuccessMsg('A new 6-digit OTP has been dispatched to your email.');
-        setTimeLeft(600); // Reset 10 minutes
-        setResendCooldown(45); // 45 seconds cooldown before next resend
+        setTimeLeft(600);
+        setResendCooldown(45);
         setOtp(['', '', '', '', '', '']);
+        if (res.previewOtp) {
+          setPreviewOtp(res.previewOtp);
+          setIsMock(true);
+        }
         inputRefs.current[0]?.focus();
       }
     } catch (err) {
@@ -169,57 +184,87 @@ export const VerifyOtp = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white border border-slate-200 rounded-3xl p-8 sm:p-10 shadow-sm">
-        <div className="text-center mb-8">
-          <div className="inline-flex w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 items-center justify-center mb-4">
-            <ShieldCheck className="w-6 h-6" />
+    <div className="min-h-[85vh] flex items-center justify-center py-8 sm:py-12 px-3 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 shadow-sm">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-indigo-50 text-indigo-600 items-center justify-center mb-3 sm:mb-4">
+            <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Verify Your Email</h2>
-          <p className="text-sm text-slate-500 mt-1.5">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Verify Your Email</h2>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
             We sent a 6-digit security code from <strong>Code-a-Nova</strong> to
           </p>
-          <div className="inline-flex items-center space-x-1.5 mt-2 px-3 py-1 rounded-full bg-slate-100 text-xs font-semibold text-slate-700">
-            <Mail className="w-3.5 h-3.5 text-slate-400" />
-            <span>{email || 'your email address'}</span>
+          <div className="inline-flex items-center space-x-1.5 mt-2 px-3 py-1 rounded-full bg-slate-100 text-xs font-semibold text-slate-700 max-w-full truncate">
+            <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span className="truncate">{email || 'your email address'}</span>
           </div>
         </div>
 
+        {/* Demo Mode / Mock Mailer Notice Banner */}
+        {previewOtp && (
+          <div className="mb-5 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-2">
+            <div className="flex items-start space-x-2">
+              <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold">Evaluation / Dev Mailer Active:</span>
+                <p className="mt-0.5 text-amber-800">
+                  Gmail App Password isn't configured in <code>.env</code> yet, so your generated OTP is:{' '}
+                  <strong className="font-mono text-sm tracking-wider bg-amber-100 px-1.5 py-0.5 rounded border border-amber-300">
+                    {previewOtp}
+                  </strong>
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleAutoFill(previewOtp)}
+              className="w-full py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold text-[11px] transition"
+            >
+              Click here to Auto-Fill OTP ({previewOtp})
+            </button>
+          </div>
+        )}
+
         {error && (
-          <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-start space-x-3 text-rose-700 text-sm">
-            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+          <div className="mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-start space-x-2.5 text-rose-700 text-xs sm:text-sm">
+            <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start space-x-3 text-emerald-800 text-sm">
-            <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5 text-emerald-600" />
+          <div className="mb-5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start space-x-2.5 text-emerald-800 text-xs sm:text-sm">
+            <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-0.5 text-emerald-600" />
             <span>{successMsg}</span>
           </div>
         )}
 
-        <form onSubmit={handleVerify} className="space-y-6">
-          {/* 6 Digit Input Boxes */}
+        <form onSubmit={handleVerify} className="space-y-5 sm:space-y-6">
+          {/* 6 Digit Input Boxes (responsive size) */}
           <div>
-            <div className="flex items-center justify-center gap-2 sm:gap-3" onPaste={handlePaste}>
+            <div
+              className="flex items-center justify-center gap-1.5 sm:gap-2.5 max-w-full"
+              onPaste={handlePaste}
+            >
               {otp.map((digit, index) => (
                 <input
                   key={index}
                   ref={(el) => (inputRefs.current[index] = el)}
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   autoFocus={index === 0}
-                  className="w-12 h-14 sm:w-13 sm:h-16 text-center text-2xl font-bold font-mono bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-indigo-600 focus:bg-white focus:outline-none transition shadow-inner"
+                  className="w-10 h-13 sm:w-12 sm:h-14 md:w-13 md:h-16 text-center text-xl sm:text-2xl font-bold font-mono bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-indigo-600 focus:bg-white focus:outline-none transition shadow-inner"
                 />
               ))}
             </div>
 
             {/* Timer and Expiry */}
-            <div className="flex items-center justify-between mt-4 text-xs text-slate-500 px-1">
+            <div className="flex items-center justify-between mt-3 text-xs text-slate-500 px-1">
               <div className="flex items-center space-x-1">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
                 <span>
@@ -229,7 +274,7 @@ export const VerifyOtp = () => {
                   </strong>
                 </span>
               </div>
-              <span>Valid for 10 minutes</span>
+              <span>10-min validity</span>
             </div>
           </div>
 
@@ -237,7 +282,7 @@ export const VerifyOtp = () => {
           <button
             type="submit"
             disabled={loading || otp.join('').length !== 6 || timeLeft === 0}
-            className="w-full inline-flex items-center justify-center space-x-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-sm transition disabled:opacity-60"
+            className="w-full inline-flex items-center justify-center space-x-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-sm transition disabled:opacity-60 text-sm"
           >
             {loading ? (
               <div className="flex items-center space-x-2">
@@ -254,7 +299,7 @@ export const VerifyOtp = () => {
         </form>
 
         {/* Resend OTP Section */}
-        <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col items-center justify-center text-sm space-y-2">
+        <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col items-center justify-center text-xs sm:text-sm space-y-2">
           <p className="text-slate-500">Didn't receive the OTP code?</p>
           <button
             type="button"
@@ -264,12 +309,12 @@ export const VerifyOtp = () => {
           >
             <RefreshCw className={`w-3.5 h-3.5 ${resending ? 'animate-spin' : ''}`} />
             <span>
-              {resendCooldown > 0 ? `Resend OTP in ${resendCooldown}s` : 'Resend OTP to Email'}
+              {resendCooldown > 0 ? `Resend OTP in ${resendCooldown}s` : 'Resend OTP'}
             </span>
           </button>
         </div>
 
-        <div className="mt-6 text-center text-xs text-slate-400">
+        <div className="mt-4 text-center text-xs text-slate-400">
           Entered the wrong email?{' '}
           <Link to="/signup" className="text-slate-600 hover:underline">
             Back to Signup

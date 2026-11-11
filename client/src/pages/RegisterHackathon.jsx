@@ -11,15 +11,10 @@ import {
   ArrowRight,
   AlertCircle,
   CheckCircle2,
-  Link2,
   FileText,
   FolderGit2,
   Tv,
-  Phone,
-  Mail,
   User,
-  Plus,
-  Trash2,
 } from 'lucide-react';
 
 export const RegisterHackathon = () => {
@@ -44,14 +39,11 @@ export const RegisterHackathon = () => {
     teamSize: 1,
   });
 
-  // Dynamic teammates state: [{ name: '', email: '' }]
   const [teamMembers, setTeamMembers] = useState([]);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successData, setSuccessData] = useState(null);
 
-  // Sync user info into form on mount
   useEffect(() => {
     if (user) {
       setFormData((prev) => ({
@@ -62,7 +54,6 @@ export const RegisterHackathon = () => {
     }
   }, [user]);
 
-  // Check if user has already registered
   useEffect(() => {
     const checkExisting = async () => {
       try {
@@ -71,13 +62,12 @@ export const RegisterHackathon = () => {
           navigate('/dashboard');
         }
       } catch (err) {
-        // Continue if not registered
+        // Continue
       }
     };
     checkExisting();
   }, [navigate]);
 
-  // Adjust dynamic team members whenever teamSize changes
   const handleTeamSizeChange = (newSize) => {
     const size = parseInt(newSize, 10);
     setFormData((prev) => ({ ...prev, teamSize: size }));
@@ -85,7 +75,7 @@ export const RegisterHackathon = () => {
     if (size <= 1) {
       setTeamMembers([]);
     } else {
-      const neededMembers = size - 1; // 1 is lead, remaining are members
+      const neededMembers = size - 1;
       const updated = [...teamMembers];
       while (updated.length < neededMembers) {
         updated.push({ name: '', email: '' });
@@ -137,7 +127,6 @@ export const RegisterHackathon = () => {
       return 'Demo Video Link must be a valid URL (e.g. YouTube / Drive).';
     }
 
-    // Teammates validation
     if (formData.teamSize > 1) {
       for (let i = 0; i < teamMembers.length; i++) {
         const m = teamMembers[i];
@@ -243,25 +232,24 @@ export const RegisterHackathon = () => {
     'GreenTech & Sustainability',
   ];
 
-  // If successfully registered, show Success Modal
   if (successData) {
     return (
-      <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-lg w-full bg-white border border-slate-200 rounded-3xl p-8 sm:p-10 shadow-lg text-center space-y-6">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-10 h-10" />
+      <div className="min-h-[85vh] flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-lg w-full bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg text-center space-y-5">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+            <CheckCircle2 className="w-8 h-8" />
           </div>
 
           <div>
             <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest">
               Registration Successful
             </span>
-            <h2 className="text-2xl font-extrabold text-slate-900 mt-1">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
               You're Registered for Code-a-Nova 2026!
             </h2>
-            <p className="text-sm text-slate-600 mt-2">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1.5">
               A formal confirmation email has been dispatched via Nodemailer to{' '}
-              <strong>{successData.email}</strong> with your full event breakdown.
+              <strong>{successData.email}</strong>.
             </p>
           </div>
 
@@ -286,7 +274,7 @@ export const RegisterHackathon = () => {
 
           <button
             onClick={() => navigate('/dashboard')}
-            className="w-full inline-flex items-center justify-center space-x-2 py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition"
+            className="w-full inline-flex items-center justify-center space-x-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition text-sm"
           >
             <span>Proceed to Dashboard</span>
             <ArrowRight className="w-4 h-4" />
@@ -297,24 +285,24 @@ export const RegisterHackathon = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10 overflow-x-hidden">
       {/* Title Header */}
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200/80 text-xs font-semibold text-indigo-700 mb-3">
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200/80 text-[11px] sm:text-xs font-semibold text-indigo-700 mb-2.5">
           <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
           <span>Code-a-Nova 2026 Official Application</span>
         </div>
-        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           Hackathon Project Registration
         </h1>
-        <p className="text-sm text-slate-500 mt-2 max-w-xl mx-auto">
-          Fill in all required project and team details. A confirmation email will be automatically sent upon successful submission.
+        <p className="text-xs sm:text-sm text-slate-500 mt-1.5 max-w-xl mx-auto px-2">
+          Fill in all required project and team details. A confirmation email will be automatically sent upon submission.
         </p>
       </div>
 
       {error && (
-        <div className="mb-8 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm flex items-start space-x-3">
-          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+        <div className="mb-6 p-3.5 sm:p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm flex items-start space-x-2.5">
+          <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-0.5" />
           <div>
             <strong className="font-semibold block">Please fix the following error:</strong>
             <span>{error}</span>
@@ -322,23 +310,19 @@ export const RegisterHackathon = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
         {/* Section 1: Team Leader & Basic Info */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-5">
+        <div className="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-sm space-y-4 sm:space-y-5">
           <div className="border-b border-slate-100 pb-3">
-            <h2 className="text-base font-bold text-slate-900 flex items-center space-x-2">
+            <h2 className="text-sm sm:text-base font-bold text-slate-900 flex items-center space-x-2">
               <User className="w-4 h-4 text-indigo-600" />
               <span>1. Team Leader Information</span>
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              The primary point of contact for project evaluation and correspondence.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {/* Full Name */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Full Name <span className="text-rose-500">*</span>
               </label>
               <input
@@ -348,16 +332,15 @@ export const RegisterHackathon = () => {
                 onChange={handleChange}
                 placeholder="Aarav Sharma"
                 required
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                className="w-full px-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
               />
-              <span className="text-[11px] text-slate-400 mt-1 block">
-                Minimum 3 characters, letters only
+              <span className="text-[10px] sm:text-[11px] text-slate-400 mt-1 block">
+                Letters only, minimum 3 chars
               </span>
             </div>
 
-            {/* Email Address (Pre-filled from auth session) */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Email Address <span className="text-rose-500">*</span>
               </label>
               <input
@@ -365,16 +348,15 @@ export const RegisterHackathon = () => {
                 name="email"
                 value={formData.email}
                 readOnly
-                className="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 cursor-not-allowed font-medium"
+                className="w-full px-3.5 py-2 sm:py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-500 cursor-not-allowed font-medium"
               />
-              <span className="text-[11px] text-slate-400 mt-1 block">
-                Locked: Pre-filled from your authenticated session
+              <span className="text-[10px] sm:text-[11px] text-slate-400 mt-1 block">
+                Pre-filled from authenticated session
               </span>
             </div>
 
-            {/* Mobile Number */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Mobile Number <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
@@ -389,17 +371,16 @@ export const RegisterHackathon = () => {
                   placeholder="9876543210"
                   maxLength={10}
                   required
-                  className="w-full pl-12 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                  className="w-full pl-11 pr-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
                 />
               </div>
-              <span className="text-[11px] text-slate-400 mt-1 block">
+              <span className="text-[10px] sm:text-[11px] text-slate-400 mt-1 block">
                 10-digit Indian mobile number
               </span>
             </div>
 
-            {/* College Name */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 College / University <span className="text-rose-500">*</span>
               </label>
               <select
@@ -407,7 +388,7 @@ export const RegisterHackathon = () => {
                 value={formData.collegeName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                className="w-full px-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
               >
                 <option value="">Select your institution...</option>
                 {colleges.map((col, idx) => (
@@ -418,27 +399,25 @@ export const RegisterHackathon = () => {
               </select>
             </div>
 
-            {/* If College = Other */}
             {formData.collegeName === 'Other' && (
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Enter College / University Name <span className="text-rose-500">*</span>
+                <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                  Specify College Name <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="otherCollege"
                   value={formData.otherCollege}
                   onChange={handleChange}
-                  placeholder="e.g. SRM Easwari Engineering College, Chennai"
+                  placeholder="e.g. SRM Easwari Engineering College"
                   required
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                  className="w-full px-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
                 />
               </div>
             )}
 
-            {/* Course */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Degree / Course <span className="text-rose-500">*</span>
               </label>
               <select
@@ -446,7 +425,7 @@ export const RegisterHackathon = () => {
                 value={formData.course}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                className="w-full px-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
               >
                 {courses.map((crs, idx) => (
                   <option key={idx} value={crs}>
@@ -456,9 +435,8 @@ export const RegisterHackathon = () => {
               </select>
             </div>
 
-            {/* Branch */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Branch / Specialization <span className="text-rose-500">*</span>
               </label>
               <select
@@ -466,7 +444,7 @@ export const RegisterHackathon = () => {
                 value={formData.branch}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                className="w-full px-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
               >
                 {branches.map((brn, idx) => (
                   <option key={idx} value={brn}>
@@ -476,9 +454,8 @@ export const RegisterHackathon = () => {
               </select>
             </div>
 
-            {/* Year of Study */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Year of Study <span className="text-rose-500">*</span>
               </label>
               <select
@@ -486,7 +463,7 @@ export const RegisterHackathon = () => {
                 value={formData.yearOfStudy}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                className="w-full px-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
               >
                 {years.map((yr, idx) => (
                   <option key={idx} value={yr}>
@@ -499,21 +476,17 @@ export const RegisterHackathon = () => {
         </div>
 
         {/* Section 2: Project & Domain Details */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-5">
+        <div className="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-sm space-y-4 sm:space-y-5">
           <div className="border-b border-slate-100 pb-3">
-            <h2 className="text-base font-bold text-slate-900 flex items-center space-x-2">
+            <h2 className="text-sm sm:text-base font-bold text-slate-900 flex items-center space-x-2">
               <Code2 className="w-4 h-4 text-indigo-600" />
               <span>2. Project & Domain Track</span>
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Specify your project proposal, technology domain, and shareable submission links.
-            </p>
           </div>
 
           <div className="space-y-4">
-            {/* Domain / Track */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Domain / Track <span className="text-rose-500">*</span>
               </label>
               <select
@@ -521,7 +494,7 @@ export const RegisterHackathon = () => {
                 value={formData.domainTrack}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                className="w-full px-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
               >
                 {domains.map((dom, idx) => (
                   <option key={idx} value={dom}>
@@ -531,9 +504,8 @@ export const RegisterHackathon = () => {
               </select>
             </div>
 
-            {/* Project Name */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Project Title / Name <span className="text-rose-500">*</span>
               </label>
               <input
@@ -543,20 +515,19 @@ export const RegisterHackathon = () => {
                 onChange={handleChange}
                 placeholder="e.g. NeuroSync: Real-Time Edge EEG Diagnostics"
                 required
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                className="w-full px-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
               />
-              <span className="text-[11px] text-slate-400 mt-1 block">
+              <span className="text-[10px] sm:text-[11px] text-slate-400 mt-1 block">
                 Minimum 5 characters long
               </span>
             </div>
 
-            {/* PPT Link */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Presentation Slide Deck Link (PPT) <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <FileText className="w-4 h-4" />
                 </div>
                 <input
@@ -564,23 +535,19 @@ export const RegisterHackathon = () => {
                   name="pptLink"
                   value={formData.pptLink}
                   onChange={handleChange}
-                  placeholder="https://drive.google.com/file/d/... or OneDrive link"
+                  placeholder="https://drive.google.com/file/d/..."
                   required
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                  className="w-full pl-9 pr-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
                 />
               </div>
-              <span className="text-[11px] text-slate-400 mt-1 block">
-                Google Drive or OneDrive shareable link (ensure link access is set to 'Anyone with link can view')
-              </span>
             </div>
 
-            {/* Prototype Link */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Prototype Link <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <FolderGit2 className="w-4 h-4" />
                 </div>
                 <input
@@ -588,23 +555,19 @@ export const RegisterHackathon = () => {
                   name="prototypeLink"
                   value={formData.prototypeLink}
                   onChange={handleChange}
-                  placeholder="https://github.com/... or Figma or live demo link"
+                  placeholder="https://github.com/... or Figma link"
                   required
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                  className="w-full pl-9 pr-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
                 />
               </div>
-              <span className="text-[11px] text-slate-400 mt-1 block">
-                GitHub repository, Figma design prototype, or live hosted application demo
-              </span>
             </div>
 
-            {/* Demo Video Link (Optional) */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                 Demo Video Link <span className="text-slate-400 text-[10px] lowercase font-normal">(optional)</span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <Tv className="w-4 h-4" />
                 </div>
                 <input
@@ -612,48 +575,41 @@ export const RegisterHackathon = () => {
                   name="demoVideoLink"
                   value={formData.demoVideoLink}
                   onChange={handleChange}
-                  placeholder="https://youtube.com/watch?v=... or Drive video link"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                  placeholder="https://youtube.com/watch?v=..."
+                  className="w-full pl-9 pr-3.5 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
                 />
               </div>
-              <span className="text-[11px] text-slate-400 mt-1 block">
-                YouTube or Google Drive video preview (2-3 minutes walkthrough)
-              </span>
             </div>
           </div>
         </div>
 
         {/* Section 3: Team Size & Dynamic Members */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-sm space-y-5">
           <div className="border-b border-slate-100 pb-3">
-            <h2 className="text-base font-bold text-slate-900 flex items-center space-x-2">
+            <h2 className="text-sm sm:text-base font-bold text-slate-900 flex items-center space-x-2">
               <Users className="w-4 h-4 text-indigo-600" />
               <span>3. Team Size & Dynamic Teammate Entry</span>
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Select total team size (1 to 5). Teammate input fields will dynamically render below.
-            </p>
           </div>
 
-          {/* Team Size Selector */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-              Total Team Size (Including Leader) <span className="text-rose-500">*</span>
+            <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
+              Total Team Size <span className="text-rose-500">*</span>
             </label>
-            <div className="grid grid-cols-5 gap-3 max-w-md">
+            <div className="grid grid-cols-5 gap-1.5 sm:gap-3 max-w-sm">
               {[1, 2, 3, 4, 5].map((size) => (
                 <button
                   key={size}
                   type="button"
                   onClick={() => handleTeamSizeChange(size)}
-                  className={`py-3 px-2 text-center rounded-2xl border font-bold text-sm transition ${
+                  className={`py-2 sm:py-3 px-1 text-center rounded-xl sm:rounded-2xl border font-bold text-xs sm:text-sm transition ${
                     formData.teamSize === size
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-100'
+                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
                       : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
-                  <span className="block text-base">{size}</span>
-                  <span className="block text-[10px] font-medium opacity-80">
+                  <span className="block text-sm sm:text-base">{size}</span>
+                  <span className="block text-[9px] sm:text-[10px] font-medium opacity-80">
                     {size === 1 ? 'Solo' : `${size} Mbrs`}
                   </span>
                 </button>
@@ -661,37 +617,34 @@ export const RegisterHackathon = () => {
             </div>
           </div>
 
-          {/* Dynamic Members Render Area */}
           {formData.teamSize === 1 ? (
-            <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 text-xs text-indigo-900 flex items-center space-x-2">
+            <div className="p-3.5 rounded-xl bg-indigo-50/50 border border-indigo-100 text-xs text-indigo-900 flex items-center space-x-2">
               <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0" />
               <span>
-                <strong>Solo Participation:</strong> You are registering as an individual. No additional teammate boxes needed.
+                <strong>Solo Entry:</strong> You are registering as an individual. No extra member boxes required.
               </span>
             </div>
           ) : (
-            <div className="space-y-4 pt-2">
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Teammate Details ({teamMembers.length} additional member{teamMembers.length > 1 ? 's' : ''})
+            <div className="space-y-3 pt-1">
+              <div className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Teammate Details ({teamMembers.length} member{teamMembers.length > 1 ? 's' : ''})
               </div>
 
               {teamMembers.map((member, index) => (
                 <div
                   key={index}
-                  className="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-4 relative"
+                  className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-700 flex items-center space-x-1.5">
-                      <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] flex items-center justify-center font-bold">
-                        {index + 2}
-                      </span>
-                      <span>Teammate #{index + 2}</span>
+                  <span className="text-xs font-bold text-slate-700 flex items-center space-x-1.5">
+                    <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] flex items-center justify-center font-bold">
+                      {index + 2}
                     </span>
-                  </div>
+                    <span>Teammate #{index + 2}</span>
+                  </span>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] font-semibold text-slate-600 uppercase mb-1">
+                      <label className="block text-[10px] sm:text-[11px] font-semibold text-slate-600 uppercase mb-1">
                         Member Name <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -700,11 +653,11 @@ export const RegisterHackathon = () => {
                         onChange={(e) => handleMemberChange(index, 'name', e.target.value)}
                         placeholder="e.g. Priya Patel"
                         required
-                        className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
+                        className="w-full px-3 py-1.5 sm:py-2 bg-white border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-slate-600 uppercase mb-1">
+                      <label className="block text-[10px] sm:text-[11px] font-semibold text-slate-600 uppercase mb-1">
                         Member Email <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -713,7 +666,7 @@ export const RegisterHackathon = () => {
                         onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
                         placeholder="e.g. priya@university.edu"
                         required
-                        className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
+                        className="w-full px-3 py-1.5 sm:py-2 bg-white border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
                       />
                     </div>
                   </div>
@@ -724,24 +677,21 @@ export const RegisterHackathon = () => {
         </div>
 
         {/* Submit Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-slate-900 rounded-3xl text-white shadow-lg">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-5 sm:p-6 bg-slate-900 rounded-2xl sm:rounded-3xl text-white shadow-lg">
           <div>
-            <div className="text-sm font-bold">Ready to finalize your entry?</div>
-            <div className="text-xs text-slate-400 mt-0.5">
-              A confirmation email will be sent automatically to {formData.email}.
+            <div className="text-xs sm:text-sm font-bold">Ready to finalize your entry?</div>
+            <div className="text-[11px] text-slate-400 mt-0.5">
+              Confirmation email will be dispatched automatically.
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-md transition disabled:opacity-60"
+            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-md transition disabled:opacity-60 text-xs sm:text-sm"
           >
             {loading ? (
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Submitting entry & sending email...</span>
-              </div>
+              <span>Submitting entry...</span>
             ) : (
               <>
                 <span>Submit Hackathon Registration</span>

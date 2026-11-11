@@ -4,10 +4,14 @@ import nodemailer from 'nodemailer';
 export const SENDER_NAME = 'Code-a-Nova';
 export const SENDER_EMAIL = process.env.EMAIL_USER || 'no-reply@codeanova.org';
 
+export const isMockMailer =
+  !process.env.EMAIL_PASS ||
+  process.env.EMAIL_PASS === 'mock_app_password' ||
+  process.env.EMAIL_PASS.trim() === '';
+
 // Create Nodemailer transport
 export const createTransporter = () => {
-  // Check if SMTP credentials are provided
-  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+  if (!isMockMailer) {
     return nodemailer.createTransport({
       service: process.env.EMAIL_SERVICE || 'gmail',
       auth: {
@@ -21,13 +25,13 @@ export const createTransporter = () => {
   console.warn('[Mailer] EMAIL_USER and EMAIL_PASS not set in environment. Running in mock/preview mailer mode.');
   return {
     sendMail: async (options) => {
-      console.log('----------------------------------------------------');
+      console.log('====================================================');
       console.log(`[Mock Mailer] Sending email from: "${SENDER_NAME}" <${SENDER_EMAIL}>`);
       console.log(`[Mock Mailer] To: ${options.to}`);
       console.log(`[Mock Mailer] Subject: ${options.subject}`);
       console.log(`[Mock Mailer] Preview Text / OTP content:`);
       console.log(options.text || '(HTML message sent)');
-      console.log('----------------------------------------------------');
+      console.log('====================================================');
       return { messageId: `mock-${Date.now()}` };
     },
   };

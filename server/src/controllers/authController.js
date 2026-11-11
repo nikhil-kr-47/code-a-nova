@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Otp from '../models/Otp.js';
-import transporter, { SENDER_NAME, SENDER_EMAIL } from '../config/mailer.js';
+import transporter, { SENDER_NAME, SENDER_EMAIL, isMockMailer } from '../config/mailer.js';
 import { generateOtp } from '../utils/generateOtp.js';
 import { getOtpEmailTemplate } from '../utils/emailTemplates.js';
 
@@ -99,8 +99,12 @@ export const signup = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: 'Signup initiated! A 6-digit OTP has been sent to your email.',
+      message: isMockMailer
+        ? `Signup initiated! (Mock Mailer active: Your OTP is ${otpCode})`
+        : 'Signup initiated! A 6-digit OTP has been sent to your email.',
       email: normalizedEmail,
+      isMock: isMockMailer,
+      previewOtp: isMockMailer ? otpCode : undefined,
     });
   } catch (error) {
     console.error('[Signup Error]:', error);
@@ -228,7 +232,11 @@ export const resendOtp = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'A fresh OTP has been dispatched to your email.',
+      message: isMockMailer
+        ? `Fresh OTP generated! (Mock Mailer active: Your OTP is ${otpCode})`
+        : 'A fresh OTP has been dispatched to your email.',
+      isMock: isMockMailer,
+      previewOtp: isMockMailer ? otpCode : undefined,
     });
   } catch (error) {
     console.error('[Resend OTP Error]:', error);
