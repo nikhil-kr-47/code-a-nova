@@ -39,7 +39,7 @@ export const getOtpEmailTemplate = (otp) => {
               <span class="otp-code">${otp}</span>
             </div>
             <p style="font-size: 13px; color: #dc2626; margin-bottom: 0;">
-              ⚠️ This code will expire in <strong>10 minutes</strong>. Never disclose this OTP to anyone.
+              Note: This code will expire in <strong>10 minutes</strong>. Never disclose this OTP to anyone.
             </p>
           </div>
           <div class="footer">

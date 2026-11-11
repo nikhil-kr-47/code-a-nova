@@ -6,7 +6,7 @@ The platform supports secure user authentication with **time-limited 6-digit OTP
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 - **Responsive Landing Page**: Hero section with countdown, event highlights, timeline, 6 domain tracks, and prize pool breakdown.
 - **Robust Authentication**:
@@ -29,7 +29,7 @@ The platform supports secure user authentication with **time-limited 6-digit OTP
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Layer | Technology | Purpose |
 | :--- | :--- | :--- |
@@ -42,7 +42,7 @@ The platform supports secure user authentication with **time-limited 6-digit OTP
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 CodeANova assignment/
@@ -79,7 +79,7 @@ CodeANova assignment/
 
 ---
 
-## ⚙️ Environment Variables Guide
+## Environment Variables Guide
 
 Create a `.env` file in the `server/` directory:
 
@@ -113,9 +113,9 @@ VITE_API_URL=http://localhost:5000/api
 
 ---
 
-## 📦 Installation & Setup
+## Installation & Setup
 
-### Option A: 🐳 Docker Quickstart (Recommended - 1 Command)
+### Option A: Docker Quickstart (Recommended)
 
 With Docker and Docker Compose installed, spin up the entire stack (MongoDB + Backend + Frontend) automatically:
 
@@ -124,7 +124,7 @@ docker compose up --build
 ```
 
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000/api
+- **Backend API**: http://localhost:5001/api (or via Nginx reverse proxy at http://localhost:3000/api)
 - **MongoDB**: localhost:27017
 
 To run in the background (detached mode):
@@ -167,7 +167,7 @@ npm run dev
 
 ---
 
-## 📑 API Endpoints Documentation
+## API Endpoints Documentation
 
 ### Authentication (`/api/auth`)
 | Method | Endpoint | Access | Description |
@@ -192,7 +192,7 @@ npm run dev
 
 ---
 
-## 🚢 Deployment Guide
+## Deployment Guide
 
 ### Backend on Render / Railway:
 1. Connect your GitHub repository to Render / Railway.
@@ -211,7 +211,7 @@ npm run dev
 
 ---
 
-## 🛡️ Evaluation Criteria Checklist
+## Evaluation Criteria Checklist
 
 - [x] **Functional Completeness**: All user flows (Signup -> OTP -> Login -> Dashboard -> Registration -> Confirmation Mail) working end-to-end.
 - [x] **Code Quality & Readability**: Modular MVC structure, clean naming conventions, human-crafted code, comprehensive comments.

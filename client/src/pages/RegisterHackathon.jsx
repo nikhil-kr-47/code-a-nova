@@ -7,7 +7,6 @@ import {
   Users,
   Building2,
   GraduationCap,
-  Sparkles,
   ArrowRight,
   AlertCircle,
   CheckCircle2,
@@ -288,9 +287,8 @@ export const RegisterHackathon = () => {
     <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10 overflow-x-hidden">
       {/* Title Header */}
       <div className="text-center mb-8">
-        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200/80 text-[11px] sm:text-xs font-semibold text-indigo-700 mb-2.5">
-          <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-          <span>Code-a-Nova 2026 Official Application</span>
+        <div className="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] sm:text-xs font-semibold text-slate-700 mb-2.5">
+          <span>Official Application Form</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           Hackathon Project Registration

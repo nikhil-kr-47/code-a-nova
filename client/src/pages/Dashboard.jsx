@@ -15,7 +15,6 @@ import {
   FolderGit2,
   Tv,
   ArrowRight,
-  Sparkles,
   Printer,
 } from 'lucide-react';
 
@@ -142,10 +141,9 @@ export const Dashboard = () => {
           </div>
 
           {/* Quick Help Card */}
-          <div className="bg-indigo-50/60 border border-indigo-100 rounded-2xl sm:rounded-3xl p-5 text-xs text-slate-600 space-y-2">
-            <div className="flex items-center space-x-1.5 font-bold text-slate-900">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-              <span>Need Assistance?</span>
+          <div className="bg-slate-50 border border-slate-200 rounded-2xl sm:rounded-3xl p-5 text-xs text-slate-600 space-y-2">
+            <div className="font-bold text-slate-900">
+              <span>Support & Amendments</span>
             </div>
             <p className="leading-relaxed text-[11px] sm:text-xs">
               For updates to your presentation link or team roster, reach our secretariat at{' '}

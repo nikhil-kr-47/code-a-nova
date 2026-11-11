@@ -4,7 +4,6 @@ import {
   Send,
   MapPin,
   Clock,
-  Sparkles,
   CheckCircle2,
   AlertCircle,
   MessageSquare,
@@ -36,9 +35,8 @@ export const Contact = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200/80 text-xs font-semibold text-indigo-700 mb-3">
-          <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-          <span>Support Desk</span>
+        <div className="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 mb-3">
+          <span>Official Helpdesk</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
           Contact Code-a-Nova
