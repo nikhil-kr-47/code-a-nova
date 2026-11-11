@@ -25,7 +25,7 @@ The platform supports secure user authentication with **time-limited 6-digit OTP
   - Full project submission overview with team composition, external submission links, and printable receipt.
 - **Email Service (Nodemailer)**:
   - Sender name strictly enforced as `Code-a-Nova`.
-  - Built-in graceful development fallback (logs email and OTP to server console if SMTP credentials are omitted).
+  - Supports Brevo SMTP relay or Gmail SMTP configured through environment variables.
 
 ---
 
@@ -102,8 +102,6 @@ EMAIL_PASS=your_gmail_16_digit_app_password
 # Allowed Client Origin (for CORS)
 CLIENT_URL=http://localhost:3000
 ```
-
-> **Note on Nodemailer**: If `EMAIL_USER` and `EMAIL_PASS` are not supplied in development, the system activates **Mock Mode**: OTPs and email contents are cleanly logged directly to the server terminal, so you can test all flows without live credentials.
 
 Create a `.env` file in the `client/` directory:
 

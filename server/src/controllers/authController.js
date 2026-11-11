@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Otp from '../models/Otp.js';
-import transporter, { SENDER_NAME, SENDER_EMAIL, isMockMailer } from '../config/mailer.js';
+import transporter, { SENDER_NAME, SENDER_EMAIL } from '../config/mailer.js';
 import { generateOtp } from '../utils/generateOtp.js';
 import { getOtpEmailTemplate } from '../utils/emailTemplates.js';
 
@@ -87,22 +87,15 @@ export const signup = async (req, res) => {
       otp: otpCode,
     });
 
-    // Send email using Nodemailer with graceful fallback on SMTP error
-    let emailSentSuccessfully = false;
-    try {
-      const emailPayload = getOtpEmailTemplate(otpCode);
-      await transporter.sendMail({
-        from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
-        to: normalizedEmail,
-        subject: emailPayload.subject,
-        text: emailPayload.text,
-        html: emailPayload.html,
-      });
-      emailSentSuccessfully = !isMockMailer;
-    } catch (mailError) {
-      console.error('[SMTP Mail Error] Failed to dispatch email via SMTP:', mailError.message);
-      console.log(`[Dev/Fallback OTP for ${normalizedEmail}]: ${otpCode}`);
-    }
+    // Send email using Nodemailer
+    const emailPayload = getOtpEmailTemplate(otpCode);
+    await transporter.sendMail({
+      from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
+      to: normalizedEmail,
+      subject: emailPayload.subject,
+      text: emailPayload.text,
+      html: emailPayload.html,
+    });
 
     return res.status(201).json({
       success: true,
@@ -223,22 +216,15 @@ export const resendOtp = async (req, res) => {
       otp: otpCode,
     });
 
-    // Send email with error catch
-    let emailSentSuccessfully = false;
-    try {
-      const emailPayload = getOtpEmailTemplate(otpCode);
-      await transporter.sendMail({
-        from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
-        to: normalizedEmail,
-        subject: emailPayload.subject,
-        text: emailPayload.text,
-        html: emailPayload.html,
-      });
-      emailSentSuccessfully = !isMockMailer;
-    } catch (mailError) {
-      console.error('[SMTP Resend Error]:', mailError.message);
-      console.log(`[Dev/Fallback OTP for ${normalizedEmail}]: ${otpCode}`);
-    }
+    // Send email using Nodemailer
+    const emailPayload = getOtpEmailTemplate(otpCode);
+    await transporter.sendMail({
+      from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
+      to: normalizedEmail,
+      subject: emailPayload.subject,
+      text: emailPayload.text,
+      html: emailPayload.html,
+    });
 
     return res.status(200).json({
       success: true,
