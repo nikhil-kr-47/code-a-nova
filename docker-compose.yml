@@ -32,6 +32,9 @@ services:
       - EMAIL_USER=${EMAIL_USER:-}
       - EMAIL_PASS=${EMAIL_PASS:-}
       - EMAIL_FROM=${EMAIL_FROM:-}
+      - BREVO_SMTP_USER=${BREVO_SMTP_USER:-}
+      - BREVO_SMTP_KEY=${BREVO_SMTP_KEY:-}
+      - BREVO_SENDER_EMAIL=${BREVO_SENDER_EMAIL:-}
     depends_on:
       - mongodb
     networks:
