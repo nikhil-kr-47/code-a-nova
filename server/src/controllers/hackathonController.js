@@ -134,6 +134,7 @@ export const registerHackathon = async (req, res) => {
     try {
       const emailContent = getRegistrationEmailTemplate({
         fullName: newRegistration.fullName,
+        email: newRegistration.email,
         registrationId,
         projectName: newRegistration.projectName,
         domainTrack: newRegistration.domainTrack,

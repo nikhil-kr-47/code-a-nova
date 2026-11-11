@@ -592,26 +592,44 @@ export const RegisterHackathon = () => {
 
           <div>
             <label className="block text-[11px] sm:text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-              Total Team Size <span className="text-rose-500">*</span>
+              Select Total Team Size <span className="text-rose-500">*</span>
             </label>
-            <div className="grid grid-cols-5 gap-1.5 sm:gap-3 max-w-sm">
-              {[1, 2, 3, 4, 5].map((size) => (
-                <button
-                  key={size}
-                  type="button"
-                  onClick={() => handleTeamSizeChange(size)}
-                  className={`py-2 sm:py-3 px-1 text-center rounded-xl sm:rounded-2xl border font-bold text-xs sm:text-sm transition ${
-                    formData.teamSize === size
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  <span className="block text-sm sm:text-base">{size}</span>
-                  <span className="block text-[9px] sm:text-[10px] font-medium opacity-80">
-                    {size === 1 ? 'Solo' : `${size} Mbrs`}
-                  </span>
-                </button>
-              ))}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+              {[
+                { size: 1, label: 'Solo', sublabel: 'Just you' },
+                { size: 2, label: '2 Members', sublabel: 'You + 1 teammate' },
+                { size: 3, label: '3 Members', sublabel: 'You + 2 teammates' },
+                { size: 4, label: '4 Members', sublabel: 'You + 3 teammates' },
+                { size: 5, label: '5 Members', sublabel: 'You + 4 teammates' },
+              ].map(({ size, label, sublabel }) => {
+                const isSelected = formData.teamSize === size;
+                return (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => handleTeamSizeChange(size)}
+                    className={`p-3 text-center rounded-xl border text-left sm:text-center transition flex flex-col justify-between ${
+                      isSelected
+                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm ring-2 ring-indigo-300'
+                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between sm:justify-center mb-1">
+                        <span className={`text-base sm:text-lg font-extrabold ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                          {size}
+                        </span>
+                      </div>
+                      <div className={`text-xs font-bold leading-tight ${isSelected ? 'text-white' : 'text-slate-800'}`}>
+                        {label}
+                      </div>
+                    </div>
+                    <div className={`text-[10px] sm:text-[11px] mt-1 font-medium leading-snug ${isSelected ? 'text-indigo-100' : 'text-slate-500'}`}>
+                      {sublabel}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -619,13 +637,18 @@ export const RegisterHackathon = () => {
             <div className="p-3.5 rounded-xl bg-indigo-50/50 border border-indigo-100 text-xs text-indigo-900 flex items-center space-x-2">
               <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0" />
               <span>
-                <strong>Solo Entry:</strong> You are registering as an individual. No extra member boxes required.
+                <strong>Solo Entry Selected:</strong> You are registering as an individual. You will be the sole participant on the team roster.
               </span>
             </div>
           ) : (
             <div className="space-y-3 pt-1">
-              <div className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Teammate Details ({teamMembers.length} member{teamMembers.length > 1 ? 's' : ''})
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-center justify-between">
+                <span>
+                  <strong>Team of {formData.teamSize}:</strong> You are <strong>#1 (Team Leader)</strong>. Please fill in details for the <strong>{teamMembers.length} teammate{teamMembers.length > 1 ? 's' : ''}</strong> below.
+                </span>
+                <span className="text-[11px] font-bold text-indigo-600 uppercase tracking-wider ml-2 shrink-0">
+                  {teamMembers.length} Slot{teamMembers.length > 1 ? 's' : ''}
+                </span>
               </div>
 
               {teamMembers.map((member, index) => (
@@ -633,36 +656,41 @@ export const RegisterHackathon = () => {
                   key={index}
                   className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3"
                 >
-                  <span className="text-xs font-bold text-slate-700 flex items-center space-x-1.5">
-                    <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] flex items-center justify-center font-bold">
-                      {index + 2}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-800 flex items-center space-x-2">
+                      <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] flex items-center justify-center font-bold">
+                        {index + 2}
+                      </span>
+                      <span>Teammate #{index + 2} (Member {index + 2} of {formData.teamSize})</span>
                     </span>
-                    <span>Teammate #{index + 2}</span>
-                  </span>
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase">
+                      Teammate
+                    </span>
+                  </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-[10px] sm:text-[11px] font-semibold text-slate-600 uppercase mb-1">
-                        Member Name <span className="text-rose-500">*</span>
+                        Full Name <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={member.name}
                         onChange={(e) => handleMemberChange(index, 'name', e.target.value)}
-                        placeholder="e.g. Priya Patel"
+                        placeholder="e.g. Priya Sharma"
                         required
                         className="w-full px-3 py-1.5 sm:py-2 bg-white border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
                       />
                     </div>
                     <div>
                       <label className="block text-[10px] sm:text-[11px] font-semibold text-slate-600 uppercase mb-1">
-                        Member Email <span className="text-rose-500">*</span>
+                        Email Address <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="email"
                         value={member.email}
                         onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
-                        placeholder="e.g. priya@university.edu"
+                        placeholder="e.g. priya.sharma@example.com"
                         required
                         className="w-full px-3 py-1.5 sm:py-2 bg-white border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
                       />

@@ -55,6 +55,7 @@ export const getOtpEmailTemplate = (otp) => {
 
 export const getRegistrationEmailTemplate = ({
   fullName,
+  email,
   registrationId,
   projectName,
   domainTrack,
@@ -62,21 +63,54 @@ export const getRegistrationEmailTemplate = ({
   teamSize,
   teamMembers,
 }) => {
-  const membersHtml =
-    teamSize > 1 && teamMembers && teamMembers.length > 0
-      ? `
-        <div style="margin-top: 16px; border-top: 1px solid #e2e8f0; padding-top: 14px;">
-          <h4 style="margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; color: #64748b;">Team Members (${teamMembers.length})</h4>
-          <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: #334155;">
-            ${teamMembers.map((m) => `<li style="margin-bottom: 4px;"><strong>${m.name}</strong> (${m.email})</li>`).join('')}
-          </ul>
-        </div>
-      `
-      : `<p style="margin: 12px 0 0 0; font-size: 14px; color: #64748b;">Solo Participation (1 Member)</p>`;
+  // Build plain text roster
+  const textMembersList = [
+    `1. ${fullName} (${email}) [Team Leader]`,
+    ...(teamMembers && teamMembers.length > 0
+      ? teamMembers.map((m, idx) => `${idx + 2}. ${m.name} (${m.email}) [Member]`)
+      : []),
+  ].join('\n');
+
+  // Build HTML team table
+  const membersHtml = `
+    <div style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 16px;">
+      <h4 style="margin: 0 0 12px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: #475569;">
+        Team Roster (${teamSize} ${teamSize === 1 ? 'Member' : 'Members'})
+      </h4>
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+          <td style="padding: 10px 12px; font-weight: 700; color: #4f46e5; width: 36px; vertical-align: top;">#1</td>
+          <td style="padding: 10px 12px; color: #0f172a;">
+            <strong style="font-size: 14px;">${fullName}</strong>
+            <span style="display: inline-block; background: #4f46e5; color: #ffffff; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-left: 6px;">Leader</span>
+            <div style="color: #64748b; font-size: 12px; margin-top: 2px;">${email}</div>
+          </td>
+        </tr>
+        ${
+          teamMembers && teamMembers.length > 0
+            ? teamMembers
+                .map(
+                  (m, idx) => `
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 10px 12px; font-weight: 700; color: #64748b; vertical-align: top;">#${idx + 2}</td>
+              <td style="padding: 10px 12px; color: #0f172a;">
+                <strong style="font-size: 14px;">${m.name}</strong>
+                <span style="display: inline-block; background: #f1f5f9; color: #475569; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; margin-left: 6px; border: 1px solid #cbd5e1;">Member</span>
+                <div style="color: #64748b; font-size: 12px; margin-top: 2px;">${m.email}</div>
+              </td>
+            </tr>
+          `
+                )
+                .join('')
+            : ''
+        }
+      </table>
+    </div>
+  `;
 
   return {
     subject: `Registration Confirmed: Code-a-Nova 2026 [${registrationId}]`,
-    text: `Hello ${fullName},\n\nYour registration for Code-a-Nova Hackathon 2026 has been successfully confirmed!\n\nRegistration ID: ${registrationId}\nProject Name: ${projectName}\nDomain/Track: ${domainTrack}\nCollege: ${collegeName}\nTeam Size: ${teamSize}\n\nWe look forward to seeing your project come to life.\n\nBest regards,\nCode-a-Nova Team`,
+    text: `Hello ${fullName},\n\nYour registration for Code-a-Nova Hackathon 2026 has been successfully confirmed!\n\nRegistration ID: ${registrationId}\nProject Name: ${projectName}\nDomain/Track: ${domainTrack}\nCollege: ${collegeName}\nTeam Size: ${teamSize}\n\nTeam Composition:\n${textMembersList}\n\nWe look forward to seeing your project come to life.\n\nBest regards,\nCode-a-Nova Team`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -89,10 +123,7 @@ export const getRegistrationEmailTemplate = ({
           .header h1 { margin: 0; color: #ffffff; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
           .badge { display: inline-block; background: #4f46e5; color: #ffffff; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; margin-top: 8px; }
           .content { padding: 32px 28px; }
-          .card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0; }
-          .row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
-          .label { color: #64748b; font-weight: 500; }
-          .value { color: #0f172a; font-weight: 600; }
+          .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0; }
           .footer { padding: 20px 28px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center; }
         </style>
       </head>
@@ -105,7 +136,7 @@ export const getRegistrationEmailTemplate = ({
           <div class="content">
             <h2 style="font-size: 18px; margin-top: 0; color: #0f172a;">Congratulations, ${fullName}!</h2>
             <p style="font-size: 14px; line-height: 1.6; color: #475569;">
-              Your entry for the <strong>Code-a-Nova Hackathon</strong> has been successfully registered in our portal. Here are your registration details:
+              Your entry for the <strong>Code-a-Nova Hackathon</strong> has been successfully registered. Here are your official entry details:
             </p>
             <div class="card">
               <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
@@ -126,8 +157,8 @@ export const getRegistrationEmailTemplate = ({
                   <td style="padding: 6px 0; font-weight: 600; color: #0f172a; text-align: right;">${collegeName}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 6px 0; color: #64748b;">Team Size:</td>
-                  <td style="padding: 6px 0; font-weight: 600; color: #0f172a; text-align: right;">${teamSize}</td>
+                  <td style="padding: 6px 0; color: #64748b;">Total Team Size:</td>
+                  <td style="padding: 6px 0; font-weight: 600; color: #0f172a; text-align: right;">${teamSize} ${teamSize === 1 ? 'Member' : 'Members'}</td>
                 </tr>
               </table>
               ${membersHtml}
