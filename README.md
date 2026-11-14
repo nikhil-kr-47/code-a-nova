@@ -6,6 +6,14 @@ The platform supports secure user authentication with **time-limited 6-digit OTP
 
 ---
 
+## Live Deployment Links
+
+- **Live Application (Frontend)**: [https://code-a-nova-nine.vercel.app](https://code-a-nova-nine.vercel.app)
+- **Live REST API (Backend)**: [https://code-a-nova-qi2t.onrender.com/api/health](https://code-a-nova-qi2t.onrender.com/api/health)
+- **Repository**: [https://github.com/nikhil-kr-47/code-a-nova](https://github.com/nikhil-kr-47/code-a-nova)
+
+---
+
 ## Key Features
 
 - **Responsive Landing Page**: Hero section with countdown, event highlights, timeline, 6 domain tracks, and prize pool breakdown.
@@ -94,10 +102,18 @@ MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/code_a_nova?r
 # JWT Authentication Secret
 JWT_SECRET=super_secret_jwt_key_code_a_nova_2026_xyz
 
-# Nodemailer Configuration (Sender is always "Code-a-Nova")
-EMAIL_SERVICE=gmail
-EMAIL_USER=your_project_email@gmail.com
-EMAIL_PASS=your_gmail_16_digit_app_password
+# Email Dispatcher Configuration (Sender is always strictly "Code-a-Nova")
+# Option 1: Brevo API / SMTP (Recommended for zero cloud port blocks)
+EMAIL_SERVICE=brevo
+BREVO_API_KEY=xkeysib-your_brevo_api_key_here
+BREVO_SMTP_USER=your_brevo_login_email@smtp-brevo.com
+BREVO_SMTP_KEY=your_brevo_smtp_key_here
+BREVO_SENDER_EMAIL=your_verified_sender@gmail.com
+
+# Option 2: Gmail SMTP (Alternative)
+# EMAIL_SERVICE=gmail
+# EMAIL_USER=your_project_email@gmail.com
+# EMAIL_PASS=your_gmail_16_digit_app_password
 
 # Allowed Client Origin (for CORS)
 CLIENT_URL=http://localhost:3000
